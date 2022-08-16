@@ -62,9 +62,9 @@ class Actor:
         else:
             return True
 
-
+# name TEXT, b_mo TEXT, hp INTEGER, mp INTEGER, attack INTEGER, defense INTEGER, gold INTEGER, xp INTEGER
 class Enemy(Actor):
-    def __init__(self, name: str, b_mo: str, hp=20, mp=5, attack=3, defense=2, gold=0, exp=0):
+    def __init__(self, name: str, b_mo: str, hp:int, mp:int, attack:int, defense:int, gold:int, exp:int):
         super().__init__(name, b_mo, hp, mp, attack, defense)
         self.name = name
         self.b_mo = b_mo
@@ -83,8 +83,9 @@ class Enemy(Actor):
 
 
 class Hero(Actor):
-    def __init__(self, level: int, name: str, b_mo: str, hp=20, mp=0, attack=0, defense=0, inventory=None, gold=0,
-                 exp=0, req_xp=0):
+    # level INTEGER, hp INTEGER, mp INTEGER, attack INTEGER, defense INTEGER, req_xp INTEGER
+    def __init__(self, name: str, b_mo: str, inventory: list, gold: int, exp: int,
+                 level: int, hp: int, mp: int, attack: int, defense: int, req_xp: int):
         super().__init__(name, b_mo, hp, mp, attack, defense)
         self.level = level
         self.name = name
@@ -97,8 +98,6 @@ class Hero(Actor):
         self.base_attack = attack
         self.defense = defense
         self.base_defense = defense
-        if inventory is None:
-            inventory = []
         self.inventory = inventory
         self.gold = gold
         self.exp = exp
@@ -192,8 +191,10 @@ class Game:
         elif next_place == 5:
             self.load()
 
+    # name: str, b_mo: str, inventory:list, level: int, hp:int, mp:int, attack:int, defense:int, gold:int,
+    #                  exp:int, req_xp:int
     def levelup(self) -> str:
-        self.our_hero = Hero(self.our_hero.level + 1, self.our_hero.name, self.our_hero.b_mo,
+        self.our_hero = Hero(self.our_hero.name, self.our_hero.b_mo, self.our_hero.inventory, self.our_hero.gold, self.our_hero.exp
                              *self.game_database.actor_by_level(self.our_hero.level + 1))
         return str(self.our_hero)
 
@@ -224,6 +225,9 @@ class Game:
     def blacksmith(self):
         print('You talk to the blacksmith...')
 
+    def merchant(self):
+        print('You talk to the merchant...')
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
@@ -251,8 +255,10 @@ if __name__ == '__main__':
         if month.lower() not in months and month.lower() not in months_short:
             print('Not a valid month, try again')
 
-    starting_level = 1
-    our_hero = Hero(starting_level, user_name, month, [*our_db.new_actor()].pop())
+    # *our_db.new_actor() =
+    # level INTEGER, hp INTEGER, mp INTEGER, attack INTEGER, defense INTEGER, req_xp INTEGER)")
+    print(*our_db.new_actor())
+    our_hero = Hero(user_name, month, [], 0, 0, *our_db.new_actor())
     our_weapon = Equippable('Stick', 0, 5, 2, 0, 0, 24, 100)
     our_hero.equip_weapon(our_weapon)
     our_game = Game(our_hero, our_db)
