@@ -27,6 +27,9 @@ class DBSetup():
         with open('./csv/enemynotes.csv', 'r') as fin:
             data_reader = csv.reader(fin)
             for i in data_reader:
+                # skip first row of data
+                if i[0] == 'name':
+                    continue
                 cur.execute('INSERT INTO enemies VALUES (?,?,?,?,?,?,?,?);', i)
 
         conn.commit()
